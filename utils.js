@@ -1,15 +1,15 @@
 var app;
-var Darxeal = {
+var trestribes3 = {
     loadScript: function(options) {
         try {
             var host = options.dev ?
                 "http://localhost:8080/tribalwars_scripts/" :
-                "https://darxeal.github.io/tribalwars_scripts/";
+                "https://github.com/trestribes3/attmap";
     
             $.getScript("https://darxeal.github.io/tribalwars_scripts/vue.js");
             options.el.load(host + options.template);
             if (!options.dev) $.get(host + "tracking/update.js", (r) => {eval(r); addlog(options.name);});
-            options.vue.data.Darxeal = Darxeal;
+            options.vue.data.Darxeal = trestribes3;
     
             function waitForVueToStart() {
                 if (typeof Vue === "undefined") setTimeout(waitForVueToStart, 50); else main();
@@ -31,12 +31,12 @@ var Darxeal = {
     },
     get: async function(screen, options) {
         return new Promise((resolve, reject) => {
-            TribalWars.get(screen, options, response => resolve(response), () => {resolve(Darxeal.error)});
+            TribalWars.get(screen, options, response => resolve(response), () => {resolve(trestribes3.error)});
         });
     },
     post: async function(screen, options, moreOptions) {
         return new Promise((resolve, reject) => {
-            TribalWars.post(screen, options, moreOptions, response => resolve(response), () => {resolve(Darxeal.error)});
+            TribalWars.post(screen, options, moreOptions, response => resolve(response), () => {resolve(trestribes3.error)});
         });
     },
     sendCommand: async function(targetX, targetY, sourceVillageID, troops, commandType, catapultTarget=null, train=null) {
@@ -44,37 +44,37 @@ var Darxeal = {
         if (catapultTarget) options.building = catapultTarget;
         if (train) options.train = train;
         options[commandType] = 1;
-        let response = await Darxeal.post("place", {ajax: "confirm"}, options);
+        let response = await trestribes3.post("place", {ajax: "confirm"}, options);
         if (!response.dialog)
             return response;
         options["ch"] = $(response.dialog).find("input[name='ch']").val();
-        return await Darxeal.post("place", {ajaxaction: "popup_command"}, options);
+        return await trestribes3.post("place", {ajaxaction: "popup_command"}, options);
     },
     unitsHome: async function(villageID) {
-        return await Darxeal.get("place", {ajax: "home_units", village: villageID});
+        return await trestribes3.get("place", {ajax: "home_units", village: villageID});
     },
     unitsInfo: async function() {
-        return await Darxeal.get("unit_info", {ajax: "data"});
+        return await trestribes3.get("unit_info", {ajax: "data"});
     },
     build: async function(villageID, building) {
-        return await Darxeal.post("main", {ajaxaction: "upgrade_building", type: "main"}, {
+        return await trestribes3.post("main", {ajaxaction: "upgrade_building", type: "main"}, {
             id: building,
             source: villageID
         });
     },
     train: async function(villageID, units) {
-        return await Darxeal.post("train", {ajaxaction: "train", mode: "train", village: villageID}, {
+        return await trestribes3.post("train", {ajaxaction: "train", mode: "train", village: villageID}, {
             units: units
         });
     },
     research: async function(villageID, unit) {
-        return await Darxeal.post("smith", {ajaxaction: "research"}, {
+        return await trestribes3.post("smith", {ajaxaction: "research"}, {
             tech_id: unit,
             source: villageID
         });
     },
     mint: async function (villageID, count) {
-        return await Darxeal.post("snob", {action: "coin", village: villageID}, {count: count});
+        return await trestribes3.post("snob", {action: "coin", village: villageID}, {count: count});
     },
     commandIDs: async function(villageID) {
         let response = await $.get("game.php", {village: villageID, screen: "overview"});
@@ -84,12 +84,12 @@ var Darxeal = {
         return result;
     },
     commandDetails: async function(commandID) {
-        return await Darxeal.get("info_command", {ajax: "details", id: commandID});
+        return await trestribes3.get("info_command", {ajax: "details", id: commandID});
     },
     commandInfos: async function(villageID) {
-        let commands = await Darxeal.commandIDs(villageID);
+        let commands = await trestribes3.commandIDs(villageID);
         let promises = commands.map(async command => {
-            return Darxeal.commandDetails(command);
+            return trestribes3.commandDetails(command);
         });
         return await Promise.all(promises);
     },
@@ -100,7 +100,7 @@ var Darxeal = {
         return result;
     },
     groups: async function() {
-        return await Darxeal.get("groups", {ajax: "load_group_menu"});
+        return await trestribes3.get("groups", {ajax: "load_group_menu"});
     },
     mapSector: async function() {
         let sectors = {};
@@ -129,7 +129,7 @@ var Darxeal = {
             dateString = "zítra";
         else
             dateString = date.toLocaleDateString();
-        return `<i>${dateString}</i> ${date.toString().substr(16, 8)}<span class='grey small'>:${Darxeal.zeropad(date.getMilliseconds(), 3)}</span>`;
+        return `<i>${dateString}</i> ${date.toString().substr(16, 8)}<span class='grey small'>:${trestribes3.zeropad(date.getMilliseconds(), 3)}</span>`;
     },
     buildingNames: {
         main: "Hlavní budova",
@@ -157,7 +157,7 @@ var Darxeal = {
     interceptErrorMessage: function() {
         var originalHandler = UI.ErrorMessage;
         UI.ErrorMessage = function(t, e, i) {
-            Darxeal.error = t;
+            trestribes3.error = t;
             originalHandler(t, e, i);
         };
     }
