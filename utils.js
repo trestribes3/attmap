@@ -6,10 +6,9 @@ var trestribes3 = {
                 "http://localhost:8080/tribalwars_scripts/" :
                 "https://github.com/trestribes3/attmap";
     
-            $.getScript("https://darxeal.github.io/tribalwars_scripts/vue.js");
+            $.getScript("https://github.com/trestribes3/attmap/blob/main/vue.js");
             options.el.load(host + options.template);
-            if (!options.dev) $.get(host + "tracking/update.js", (r) => {eval(r); addlog(options.name);});
-            options.vue.data.Darxeal = trestribes3;
+            options.vue.data.trestribes3 = trestribes3;
     
             function waitForVueToStart() {
                 if (typeof Vue === "undefined") setTimeout(waitForVueToStart, 50); else main();
